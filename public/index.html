@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<head>
+    <title>Triple DES</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+
+        const loadingSpinnerHTML = `<span id="decryptSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`;
+        
+        function encrypt() {
+            let encryptInputString = document.getElementById('encryptInputString').value;
+            let encryptSecretKey = document.getElementById('encryptSecretKey').value;
+
+            if(!encryptInputString || !encryptSecretKey) {
+                alert("Required Fields missing!")
+                return;
+            }
+
+            let encryptButton = document.getElementById('encryptButton');
+
+            encryptButton.innerHTML = loadingSpinnerHTML;
+            encryptButton.classList.add("disabled");
+
+            let data = { plainText: encryptInputString, key: encryptSecretKey };
+            const response = fetch('/tripledes/encrypt', {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                mode: 'cors', // no-cors, *cors, same-origin
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, *same-origin, omit
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                redirect: 'follow',
+                referrerPolicy: 'no-referrer',
+                body: JSON.stringify(data)
+            }).then(data => {
+                data.json().then(resp => {
+                    encryptButton.innerHTML = "Encrypt";
+                    encryptButton.classList.remove("disabled");
+                    document.getElementById('encryptOutput').innerHTML = resp;
+                })
+            }).catch(e => {
+                encryptButton.value = "Encrypt";
+                encryptButton.classList.remove("disabled");
+            });
+        }
+
+        function decrypt() {
+            let cipherText = document.getElementById('decryptInputString').value;
+            let decryptSecretKey = document.getElementById('decryptSecretKey').value;
+
+            if(!cipherText || !decryptSecretKey) {
+                alert("Required Fields missing!")
+                return;
+            }
+
+            let decryptButton = document.getElementById('decryptButton');
+
+            decryptButton.innerHTML = loadingSpinnerHTML;
+            decryptButton.classList.add("disabled");
+
+            let data = { cipherText: cipherText, key: decryptSecretKey };
+            const response = fetch('/tripledes/decrypt', {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                mode: 'cors', // no-cors, *cors, same-origin
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, *same-origin, omit
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                redirect: 'follow',
+                referrerPolicy: 'no-referrer',
+                body: JSON.stringify(data)
+            }).then(data => {
+                data.json().then(resp => {
+                    decryptButton.innerHTML = "Decrypt";
+                    decryptButton.classList.remove("disabled");
+                    document.getElementById('decryptOutput').innerHTML = resp;
+                })
+            }).catch(e => {
+                decryptButton.value = "Decrypt";
+                decryptButton.classList.remove("disabled");
+            });;
+        }
+
+    </script>
+</head>
+
+<body style="background-color: #f8f9fa;">
+    <div class="container mt-3">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <div class="col-sm-12 col-12 h-100">
+        <div class="row text-center">
+            <h1>Network Security CSOE16 Project</h1>
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-6 col-sm-6 col-12">
+                <form role="form">
+                    <h2>Triple DES Encryption </h2>
+                    <div class="form-group">
+                        <label for="encryptInputString">Enter text to be Encrypted</label>
+                        <textarea id="encryptInputString" class="form-control input-lg " rows="5" placeholder="Enter plain text to encrypt" id="textToEncrypt" name="textToEncrypt"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="encryptSecretKey">Enter Secret Key</label>
+                        <input class="form-control input-lg" id="encryptSecretKey" placeholder="Enter secret key" name="secretkey">
+                    </div>
+                </form>
+                <div class="form-group">
+                    <button class="btn btn-primary" id="encryptButton" name="hash" value="hash">Encrypt</button>
+                </div>
+                <div class="form-group">
+                    <label for="outputString">Triple DES Encrypted Output:</label>
+                    <textarea id="encryptOutput" class="form-control input-lg" rows="5" placeholder="Encrypted result goes here"></textarea>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-12" style="border-left: 2px solid #8e8d8d">
+                <form role="form">
+                    <h2>Triple DES Decryption </h2>
+                    <div class="form-group">
+                        <label for="decryptInputString">Enter text to be Decrypted</label>
+                        <textarea id="decryptInputString" class="form-control input-lg" rows="5" placeholder="Enter text to Decrypt" name="textToDecrypt"></textarea>
+                    </div>
+                </form>
+                <div class="form-group">
+                    <label for="decryptSecretKey">Enter Secret Key</label>
+                    <input class="form-control input-lg" id="decryptSecretKey" placeholder="Enter secret key" name="secretkey">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary" id="decryptButton" name="hash" value="hash">Decrypt</button>
+                </div>
+                <div class="form-group">
+                    <label for="decryptOutput">Triple DES Decrypted Output:</label>
+                    <textarea id="decryptOutput" class="form-control input-lg" rows="5"  placeholder="Decrypted result goes here"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById("encryptButton").onclick = encrypt;
+        document.getElementById("decryptButton").onclick = decrypt;
+    </script>
+</body>
+</html>
