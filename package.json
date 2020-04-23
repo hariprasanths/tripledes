@@ -1,0 +1,24 @@
+{
+  "name": "tripledes-implementation",
+  "version": "1.0.0",
+  "description": "Implementation of Triple DES",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hariprasanths/tripledes.git"
+  },
+  "author": "Hariprasanth S",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hariprasanths/tripledes/issues"
+  },
+  "homepage": "https://github.com/hariprasanths/tripledes#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4"
+  }
+}
